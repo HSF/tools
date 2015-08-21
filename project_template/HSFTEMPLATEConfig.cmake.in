@@ -1,0 +1,15 @@
+# - Config file for the HSFTEMPLATE package
+# It defines the following variables
+#  HSFTEMPLATE_INCLUDE_DIRS - include directories
+#  HSFTEMPLATE_LIBRARIES    - libraries to link against
+#  HSFTEMPLATE_LIBRARY_DIR  - HSFTEMPLATE library dir
+#  HSFTEMPLATE_BINARY_DIR   - binary directory
+
+# Compute paths
+get_filename_component(HSFTEMPLATE_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+get_filename_component(HSFTEMPLATE_INCLUDE_DIRS "${HSFTEMPLATE_CMAKE_DIR}/../include" ABSOLUTE)
+get_filename_component(HSFTEMPLATE_BINARY_DIR "${HSFTEMPLATE_CMAKE_DIR}/../bin" ABSOLUTE)
+get_filename_component(HSFTEMPLATE_LIBRARY_DIR "${HSFTEMPLATE_CMAKE_DIR}/../lib" ABSOLUTE)
+
+ADD_LIBRARY(examplelibrary SHARED IMPORTED)
