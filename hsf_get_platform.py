@@ -94,8 +94,8 @@ class HSFPlatform(object):
 
     @staticmethod
     def full_platform(architecture = None,
-                      compiler     = None,
                       os           = None,
+                      compiler     = None,
                       buildtype    = None ):
         """
         Return the full platform components
@@ -104,13 +104,14 @@ class HSFPlatform(object):
         if architecture == None: architecture = HSFPlatform.architecture()
         if compiler     == None: compiler = HSFPlatform.compiler()
         if os           == None: os = HSFPlatform.os()
+        if buildtype    == None: buildtype = "all"
 
         return (architecture, os, compiler, buildtype)
 
     @staticmethod
     def full_platform_string(architecture = None,
-                      compiler     = None,
                       os           = None,
+                      compiler     = None,
                       buildtype    = None ):
         """
         Return the full platform string consisting of
@@ -123,11 +124,11 @@ if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("-a", "--architecture", dest="architecture",
                   help="set architecture", default=None)
-    parser.add_option("-t", "--buildtype", dest="buildtype",
+    parser.add_option("-b", "--buildtype", dest="buildtype",
                   help="set buildtype", default = None)
     parser.add_option("-c", "--compiler", dest="compiler",
                   help="set compiler", default = None)
-    parser.add_option("-s", "--operating_system", dest="os",
+    parser.add_option("-s", "--system", dest="os",
                   help="set operating system", default = None)
     parser.add_option("--get", dest="to_get",
                   help="get either of 'os,architecture,compiler'. Otherwise dump the entire platform", default = None)
@@ -145,6 +146,6 @@ if __name__ == "__main__":
     else:
         print HSFPlatform.full_platform_string(architecture = options.architecture,
                                         compiler     = options.compiler,
-                                        os           = options.compiler,
+                                        os           = options.os,
                                         buildtype    = options.buildtype
         )
