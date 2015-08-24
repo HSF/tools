@@ -50,11 +50,11 @@ class HSFPlatformCompatibility(object):
 
     def check_compiler(self, comp1, comp2):
         # assume that major/minor versions are compatible and patch versions do not matter
-        # exceptions to be coded up explicitly  
+        # exceptions to be coded up explicitly
         if (comp1[:-1] == comp2[:-1]):
           return True
         self.failureReason = "Compilers %s and %s are incompatible" %(comp1, comp2)
-        return False 
+        return False
 
     def check_buildtype(self, type1, type2):
         # assume general compatibility for now
@@ -71,8 +71,9 @@ class HSFPlatformCompatibility(object):
 if __name__ == "__main__":
     usage = "usage: %prog [options] platform1 platform2"
     parser = OptionParser(usage=usage)
-    parser.add_option("-v", "--verbosity", dest="verbosity",
-                  help="set verbosity", default=None)
+    parser.add_option("-q", "--quiet",
+                      action="store_false", dest="verbose", default=True,
+                      help="don't print info messages")
 
     (options, args) = parser.parse_args()
     if len(args) != 2:
@@ -84,5 +85,6 @@ if __name__ == "__main__":
     if isCompatible:
       sys.exit(0)
     else:
-      print comp.failureReason
-      sys.exit(1)  
+      if options.verbose:
+        print comp.failureReason
+      sys.exit(1)
