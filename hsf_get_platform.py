@@ -8,7 +8,7 @@
 # In applying this licence, CERN does not waive the privileges and immunities #
 # granted to it by virtue of its status as an Intergovernmental Organization  #
 # or submit itself to any jurisdiction.                                       #
-#############################################################################
+###############################################################################
 
 __author__ = "Benedikt Hegner (CERN)"
 __copyright__ = "Copyright (C) 2015 CERN"
