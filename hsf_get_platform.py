@@ -1,4 +1,14 @@
 #!/usr/bin/env python
+###############################################################################
+# (c) Copyright 2015 CERN                                                     #
+#                                                                             #
+# This software is distributed under the terms of the GNU General Public      #
+# Licence version 3 (GPL Version 3), copied verbatim in the file "LICENCE".   #
+#                                                                             #
+# In applying this licence, CERN does not waive the privileges and immunities #
+# granted to it by virtue of its status as an Intergovernmental Organization  #
+# or submit itself to any jurisdiction.                                       #
+#############################################################################
 
 __author__ = "Benedikt Hegner (CERN)"
 __copyright__ = "Copyright (C) 2015 CERN"
@@ -72,11 +82,6 @@ class HSFPlatform(object):
             patt = re.compile('.*Version ([0-9]+)[.].*')
             mobj = patt.match(versioninfo)
             compiler = 'vc' + str(int(mobj.group(1))-6)
-        elif ccommand.endswith('gcc'):
-            versioninfo = os.popen(ccommand + ' -dumpversion').read()
-            patt = re.compile('([0-9]+)\\.([0-9]+)')
-            mobj = patt.match(versioninfo)
-            compiler = 'gcc' + mobj.group(1) + mobj.group(2)
         elif ccommand.endswith('clang'):
             versioninfo = os.popen4(ccommand + ' -v')[1].read()
             patt = re.compile('.*version ([0-9]+)[.]([0-9]+)')
@@ -87,6 +92,11 @@ class HSFPlatform(object):
             patt = re.compile('([0-9]+)\\.([0-9]+)')
             mobj = patt.match(versioninfo)
             compiler = 'icc' + mobj.group(1)
+        elif ccommand.endswith('cc'):
+            versioninfo = os.popen(ccommand + ' -dumpversion').read()
+            patt = re.compile('([0-9]+)\\.([0-9]+)')
+            mobj = patt.match(versioninfo)
+            compiler = 'gcc' + mobj.group(1) + mobj.group(2)
         else:
             compiler = 'unknown'
 

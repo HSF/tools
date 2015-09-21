@@ -9,34 +9,28 @@ set( HSFTEMPLATE_VERSION "${HSFTEMPLATE_VERSION_MAJOR}.${HSFTEMPLATE_VERSION_MIN
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-#--- enable unit testing capabilities ------------------
+#--- enable unit testing capabilities ------------------------------------------
 include(CTest)
 
-#--- subdirectories ------------------------------------
-add_subdirectory(subpackage)
+#--- enable CPack --------------------------------------------------------------
+include(cmake/HSFTEMPLATECPack.cmake)
 
-#--- target for Doxygen documentation ------------------
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in
-                 ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY
-                )
-  add_custom_target(doc
-  ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  COMMENT "Generating API documentation with Doxygen" VERBATIM
-  )
-  install( DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen DESTINATION doxygen OPTIONAL)
-endif(DOXYGEN_FOUND)
+#--- target for Doxygen documentation ------------------------------------------
+include(cmake/HSFTEMPLATEDoxygen.cmake)
 
-#--- targets for CMake infrastructure ------------------
-include(CMakePackageConfigHelpers)
+#--- add version files ---------------------------------------------------------
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/HSFTEMPLATEVersion.h
+               ${CMAKE_CURRENT_BINARY_DIR}/HSFTEMPLATEVersion.h )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/HSFTEMPLATEVersion.h
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/HSFTEMPLATE )
 
-configure_file(HSFTEMPLATEConfig.cmake.in "${PROJECT_BINARY_DIR}/HSFTEMPLATEConfig.cmake" @ONLY)
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/HSFTEMPLATEConfigVersion.cmake
-                                 VERSION ${HSFTEMPLATE_VERSION}
-                                 COMPATIBILITY SameMajorVersion )
+#--- add CMake infrastructure --------------------------------------------------
+include(cmake/HSFTEMPLATECreateConfig.cmake)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/HSFTEMPLATEConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/HSFTEMPLATEConfigVersion.cmake
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake )
+#--- add license files ---------------------------------------------------------
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
+              ${CMAKE_CURRENT_SOURCE_DIR}/NOTICE
+        DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+#--- project specific subdirectories -------------------------------------------
+add_subdirectory(HSFSUBPACKAGE)

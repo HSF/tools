@@ -10,13 +10,18 @@
 # or submit itself to any jurisdiction.                                       #
 ###############################################################################
 
+__author__ = "Benedikt Hegner (CERN)"
+__copyright__ = "Copyright (C) 2015 CERN"
+__license__ = "GPLv3"
+__version__ = "0.1"
+
 import datetime, os, shutil, sys
 from os.path import join, split, dirname, abspath
 
 class ProjectCreator(object):
 
     def __init__(self,projectname, author, target_dir,license,
-                 verbose=True):
+                 verbose=True, subpackage_name="package"):
         self.location = dirname(abspath(__file__))
         self.template_dir = join(self.location,"project_template")
         self.license_dir  = join(self.location,"project_licenses")
@@ -28,6 +33,7 @@ class ProjectCreator(object):
         self.target_dir = target_dir
         self.author = author
         self.verbose = verbose
+        self.subpackage_name = subpackage_name
         self.license = license
         if self.license not in self.licenses:
             self.report("ERROR: license %s unknown" %license)
@@ -88,20 +94,26 @@ class ProjectCreator(object):
 
         replacements = {"COPYRIGHTNOTICE" : copyrightnotice,
                         "HSFTEMPLATE"     : self.name,
-                        "AUTHOR"          : self.author
+                        "AUTHOR"          : self.author,
+                        "HSFSUBPACKAGE"   : self.subpackage_name
         }
         for subdir, dirs, files in os.walk(self.target_dir):
             for file in files:
                 self.replace_in_file(join(subdir, file),replacements)
-        os.rename(join(self.target_dir,"HSFTEMPLATEConfig.cmake.in"),join(self.target_dir,"%sConfig.cmake.in" %self.name))
-
-
+        os.rename(join(self.target_dir,"cmake/HSFTEMPLATECPack.cmake"),join(self.target_dir,"cmake/%sCPack.cmake" %self.name))
+        os.rename(join(self.target_dir,"cmake/HSFTEMPLATEConfig.cmake.in"),join(self.target_dir,"cmake/%sConfig.cmake.in" %self.name))
+        os.rename(join(self.target_dir,"cmake/HSFTEMPLATECreateConfig.cmake"),join(self.target_dir,"cmake/%sCreateConfig.cmake" %self.name))
+        os.rename(join(self.target_dir,"cmake/HSFTEMPLATEDoxygen.cmake"),join(self.target_dir,"cmake/%sDoxygen.cmake" %self.name))
+        os.rename(join(self.target_dir,"HSFTEMPLATEVersion.h"),join(self.target_dir,"%sVersion.h" %self.name))
+        os.rename(join(self.target_dir,"package/include/example"),join(self.target_dir,"package/include/%s" %self.name))
+        os.rename(join(self.target_dir,"package"),join(self.target_dir,"%s" %self.subpackage_name))
     def print_summary(self):
         """Print summary and help message"""
         summary  = "Finished creating project '%s'\n" %self.name
         summary += "  directory: %s\n" % self.target_dir
         summary += "  author   : %s\n" % self.author
         summary += "  license  : %s\n" % self.license
+        summary += "  package  : %s\n" %self.subpackage_name
 
         howto  = "To build and install it, please do:\n"
         howto += "  cd %s\n  mkdir build\n  cd build\n" %self.target_dir
@@ -111,6 +123,8 @@ class ProjectCreator(object):
         howto += "  make doc\n"
         howto += "To run the unit tests:\n"
         howto += "  make test\n"
+        howto += "To trigger the package creation with CPack:\n"
+        howto += "  make package\n"
         howto += "\nPlease do not forget to add a project description to README.md !"
 
         self.report(summary)
@@ -127,11 +141,14 @@ if __name__ == "__main__":
     parser.add_option("-q", "--quiet",
                       action="store_false", dest="verbose", default=True,
                       help="Don't write a report to screen")
+    parser.add_option("-p", "--package",
+                      action="store", dest="subpackage_name", default="package",
+                      help="Name of the created example-subpackage")
 
     (options, args) = parser.parse_args()
     if len(args) != 4:
         parser.error("Incorrect number of arguments.")
 
-    creator = ProjectCreator(*args,verbose=options.verbose)
+    creator = ProjectCreator(*args,verbose=options.verbose,subpackage_name=options.subpackage_name)
     creator.create()
     creator.print_summary()

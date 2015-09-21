@@ -1,4 +1,4 @@
-#include "example/Example.h"
+#include "HSFTEMPLATE/Example.h"
 
 namespace HSFTEMPLATE {
 

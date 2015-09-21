@@ -2,7 +2,7 @@
 #include "gtest/gtest.h"
 
 // project specific include
-#include "example/Example.h"
+#include "HSFTEMPLATE/Example.h"
 
 using namespace HSFTEMPLATE;
 

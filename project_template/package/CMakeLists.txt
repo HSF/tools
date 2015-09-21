@@ -14,5 +14,8 @@ add_library(examplelibrary SHARED ${sources})
 ## install the example library into lib/
 install(TARGETS examplelibrary DESTINATION lib)
 
+## install the headers
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HSFTEMPLATE DESTINATION include)
+
 ## handling of test executables
 add_subdirectory(tests)

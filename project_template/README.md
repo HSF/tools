@@ -22,6 +22,12 @@ The documentation of the project is based on doxygen. Invoking
 
 installs the documentation into installdir/doxygen.
 
+## Creating a package with CPack
+
+A cpack based package can be created by invoking
+
+    make package
+
 ## Running the tests
 
 To run the tests of the project, first build it and then invoke
