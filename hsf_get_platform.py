@@ -84,19 +84,19 @@ class HSFPlatform(object):
             compiler = 'vc' + str(int(mobj.group(1))-6)
         elif ccommand.endswith('clang'):
             versioninfo = os.popen4(ccommand + ' -v')[1].read()
-            patt = re.compile('.*version ([0-9]+)[.]([0-9]+)')
+            patt = re.compile('.*version ([0-9]+)[.]([0-9]+)\\.([0-9]+)')
             mobj = patt.match(versioninfo)
             compiler = 'clang' + mobj.group(1) + mobj.group(2)
         elif ccommand == 'icc':
             versioninfo = os.popen(ccommand + ' -dumpversion').read()
-            patt = re.compile('([0-9]+)\\.([0-9]+)')
+            patt = re.compile('([0-9]+)\\.([0-9]+)\\.([0-9]+)')
             mobj = patt.match(versioninfo)
             compiler = 'icc' + mobj.group(1)
         elif ccommand.endswith('cc'):
             versioninfo = os.popen(ccommand + ' -dumpversion').read()
-            patt = re.compile('([0-9]+)\\.([0-9]+)')
+            patt = re.compile('([0-9]+)\\.([0-9]+)\\.([0-9]+)')
             mobj = patt.match(versioninfo)
-            compiler = 'gcc' + mobj.group(1) + mobj.group(2)
+            compiler = 'gcc' + mobj.group(1) + mobj.group(2) + mobj.group(3)
         else:
             compiler = 'unknown'
 
