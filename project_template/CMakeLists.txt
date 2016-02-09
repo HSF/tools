@@ -9,6 +9,9 @@ set( HSFTEMPLATE_VERSION "${HSFTEMPLATE_VERSION_MAJOR}.${HSFTEMPLATE_VERSION_MIN
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+#--- Declare options -----------------------------------------------------------
+option(HSFTEMPLATE_documentation "Whether or not to create doxygen doc target.")
+
 #--- enable unit testing capabilities ------------------------------------------
 include(CTest)
 
@@ -16,7 +19,9 @@ include(CTest)
 include(cmake/HSFTEMPLATECPack.cmake)
 
 #--- target for Doxygen documentation ------------------------------------------
-include(cmake/HSFTEMPLATEDoxygen.cmake)
+if(HSFTEMPLATE_documentation)
+  include(cmake/HSFTEMPLATEDoxygen.cmake)
+endif()
 
 #--- add version files ---------------------------------------------------------
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/HSFTEMPLATEVersion.h
