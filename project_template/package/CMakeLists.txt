@@ -1,21 +1,31 @@
-## add include directory
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 ## select all source files
 file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 ## create a library target
 add_library(examplelibrary SHARED ${sources})
 
+# - Define its header interface when building and when installed
+# (i.e. used by a third party)
+target_include_directories(examplelibrary
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    )
+
 ## if needed, link against "someexternal"
 ## which has been included with find_package(someexternal)
 #target_link_libraries(examplelibrary ${someexternal_LIBRARIES})
 
-## install the example library into lib/
-install(TARGETS examplelibrary DESTINATION lib)
+# - Install the example library into the install time library directory
+# The EXPORT name is used so that we can "export" the target for
+# use by client projects
+install(TARGETS examplelibrary
+  EXPORT HSFTEMPLATETargets
+  DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 ## install the headers
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HSFTEMPLATE DESTINATION include)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HSFTEMPLATE
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 ## handling of test executables
 add_subdirectory(tests)
