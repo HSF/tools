@@ -7,5 +7,7 @@ if(DOXYGEN_FOUND)
                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                     COMMENT "Generating API documentation with Doxygen" VERBATIM)
 
-  install( DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen DESTINATION doxygen OPTIONAL)
-endif(DOXYGEN_FOUND)
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doxygen
+    DESTINATION ${CMAKE_INSTALL_DOCDIR}/doxygen
+    OPTIONAL)
+endif()
