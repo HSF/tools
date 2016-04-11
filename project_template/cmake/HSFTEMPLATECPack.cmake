@@ -26,16 +26,23 @@ if(buildtype_lower STREQUAL "release")
   set(HSF_BUILDTYPE "opt")
 elseif(buildtype_lower STREQUAL "debug")
   set(HSF_BUILDTYPE "dbg")
-elseif(buildtype_lower STREQUAL "relwithbebinfo")
+elseif(buildtype_lower STREQUAL "relwithdebinfo")
   set(HSF_BUILDTYPE "owd")
 endif()
 
 
-#--- use HSF platform name -----------------------------------------------------
+#--- use HSF platform name if possible -----------------------------------------
 execute_process(
   COMMAND hsf_get_platform.py --buildtype ${HSF_BUILDTYPE}
   OUTPUT_VARIABLE HSF_PLATFORM OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+# If hsf_get_platform isn't available, use CMake standard variables in same layout
+# Don't use versions for system/compiler as these do not match HSF versioning
+# for system directly.
+if(NOT HSF_PLATFORM)
+  set(HSF_PLATFORM "${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_SYSTEM_NAME}-${CMAKE_CXX_COMPILER_ID}-${HSF_BUILDTYPE}")
+  string(TOLOWER ${HSF_PLATFORM} HSF_PLATFORM)
+endif()
 
 set(CPACK_PACKAGE_RELOCATABLE True)
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "HSFTEMPLATE_${HSFTEMPLATE_VERSION}")
