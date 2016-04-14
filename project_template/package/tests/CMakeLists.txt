@@ -3,13 +3,19 @@
 # than used from the system!
 find_package(GTest REQUIRED)
 
-## handling of test executables
-## here a generic example for creating one executable per .cpp is shown
-file(GLOB tests RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
-message(${tests})
-foreach( sourcefile ${tests} )
-  string( REPLACE ".cpp" "" name ${sourcefile} )
-  add_executable( ${name} ${sourcefile} )
-  target_link_libraries( ${name} examplelibrary  ${GTEST_LIBRARIES})
-  add_test(NAME ${name} COMMAND ${name})
-endforeach()
+# - handling of test executables
+# Here a generic example for creating an executable then defining it as a
+# test to CTest
+# 1. Create executable
+add_executable(test_example test_example.cpp)
+
+# 2. Link it to the librayr being tested, plus the unit test library(ies)
+target_link_libraries(test_example examplelibrary ${GTEST_LIBRARIES})
+
+# 3. Add the test program as a command to be run as a test
+# Note: NAME is what will be shown in CTest, COMMAND is what will be run
+#       CMake knows that text_example is a CMake target, and knows where
+#       the resultant executable is. Things like PATH and so on do not need
+#       to be set.
+add_test(NAME testExampleClass COMMAND test_example)
+
