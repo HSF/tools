@@ -1,23 +1,28 @@
-// gtest
-#include "gtest/gtest.h"
+// Catch setup with supplied main()
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
 
-// project specific include
+// Header for interface we want to test
 #include "HSFTEMPLATE/Example.h"
 
-using namespace HSFTEMPLATE;
+// Define Catch test case
+// See
+//   https://github.com/philsquared/Catch/blob/master/docs/tutorial.md
+// and
+//   https://github.com/philsquared/Catch/blob/master/docs/Readme.md
+// for additional docs on Catch
+TEST_CASE( "Example behaves correctly", "[interface]" ) {
+  auto e = HSFTEMPLATE::Example();
+  REQUIRE( e.get() == 0 );
 
-TEST(Example, DoesThings) {
-  auto e = Example();
-  EXPECT_EQ(0,e.get());
+  SECTION( "Copy assignment works" ) {
+    e = HSFTEMPLATE::Example(10);
+    REQUIRE( e.get() == 10 );
+  }
 
-  e = Example(10);
-  EXPECT_EQ(10,e.get());
-
-  e.set(12);
-  EXPECT_EQ(12,e.get());
+  SECTION( "Setting/Getting interface works" ) {
+    e.set(12);
+    REQUIRE( e.get() == 12 );
+  }
 }
 
-int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
