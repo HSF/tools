@@ -1,8 +1,14 @@
-## select all source files
-file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+# List sources for target
+# - Note that we include headers. CMake will resolve dependencies on headers
+#   correctly, but they will not show up in IDEs like Xcode if they are not
+#   listed in the files for a target
+set(examplelibrary_SOURCES
+  include/HSFTEMPLATE/Example.h
+  src/Example.cpp
+  )
 
 ## create a library target
-add_library(examplelibrary SHARED ${sources})
+add_library(examplelibrary SHARED ${examplelibrary_SOURCES})
 
 # - Define its header interface when building and when installed
 # (i.e. used by a third party)
@@ -21,11 +27,13 @@ target_include_directories(examplelibrary
 # use by client projects
 install(TARGETS examplelibrary
   EXPORT HSFTEMPLATETargets
-  DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
 
 ## install the headers
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HSFTEMPLATE
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  )
 
 # - If testing is required, recurse into the directory holding them
 # Note: The BUILD_TESTING variable is set by the inclusion of the CTest
