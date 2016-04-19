@@ -17,7 +17,7 @@ target_include_directories(catch INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/catch)
 # 1. Create executable
 add_executable(test_example test_example.cpp)
 
-# 2. Link it to the librayr being tested, plus the unit test library(ies)
+# 2. Link it to the library being tested, plus the unit test library(ies)
 target_link_libraries(test_example examplelibrary catch)
 
 # 3. Add the test program as a command to be run as a test
