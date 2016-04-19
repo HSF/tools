@@ -35,5 +35,12 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HSFTEMPLATE
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
 
-## handling of test executables
-add_subdirectory(tests)
+# - If testing is required, recurse into the directory holding them
+# Note: The BUILD_TESTING variable is set by the inclusion of the CTest
+#       Module (done in the root CMake script for the project). It's set
+#       as a CMake option that's ON by default, but may be toggled by
+#       a cmake-time command line option or through the CMake curses/GUI.
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
+
