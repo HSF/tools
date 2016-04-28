@@ -10,17 +10,18 @@ Please add some lines describing the project!
     make -j<number of cores on your machine>
     make install
 
-
-Pleae note that this project depends on an existing installation of gtest. It may be necessary to include its location into _CMAKE_PREFIX_PATH_. For further details please have a look at http://www.cmake.org/cmake-tutorial/ .
-
 ## Building the documentation
 
-The documentation of the project is based on doxygen. Invoking
+The documentation of the project is based on doxygen.
+If you would like to build it, you have to configure the package with
+
+    cmake -DHSFTEMPLATE_documentation -DCMAKE_INSTALL_PREFIX=<installdir>  <path to sources>
+Invoking
 
     make doc
     make install
 
-installs the documentation into installdir/doxygen.
+installs the documentation into installdir/share/doc/.
 
 ## Creating a package with CPack
 
