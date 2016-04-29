@@ -103,7 +103,6 @@ class ProjectCreator(object):
         os.rename(join(self.target_dir,"cmake/HSFTEMPLATECPack.cmake"),join(self.target_dir,"cmake/%sCPack.cmake" %self.name))
         os.rename(join(self.target_dir,"cmake/HSFTEMPLATEConfig.cmake.in"),join(self.target_dir,"cmake/%sConfig.cmake.in" %self.name))
         os.rename(join(self.target_dir,"cmake/HSFTEMPLATECreateConfig.cmake"),join(self.target_dir,"cmake/%sCreateConfig.cmake" %self.name))
-        os.rename(join(self.target_dir,"cmake/HSFTEMPLATEDoxygen.cmake"),join(self.target_dir,"cmake/%sDoxygen.cmake" %self.name))
         os.rename(join(self.target_dir,"HSFTEMPLATEVersion.h"),join(self.target_dir,"%sVersion.h" %self.name))
         os.rename(join(self.target_dir,"package/include/example"),join(self.target_dir,"package/include/%s" %self.name))
         os.rename(join(self.target_dir,"package"),join(self.target_dir,"%s" %self.subpackage_name))
