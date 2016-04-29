@@ -44,7 +44,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 #--- Declare options -----------------------------------------------------------
-option(HSFTEMPLATE_documentation "Whether or not to create doxygen doc target.")
+option(HSFTEMPLATE_BUILD_DOCS "Whether or not to create doxygen doc target.")
 
 #--- enable unit testing capabilities ------------------------------------------
 include(CTest)
@@ -53,8 +53,8 @@ include(CTest)
 include(cmake/HSFTEMPLATECPack.cmake)
 
 #--- target for Doxygen documentation ------------------------------------------
-if(HSFTEMPLATE_documentation)
-  include(cmake/HSFTEMPLATEDoxygen.cmake)
+if(HSFTEMPLATE_BUILD_DOCS)
+  add_subdirectory(doc)
 endif()
 
 #--- add version files ---------------------------------------------------------
