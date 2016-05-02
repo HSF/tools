@@ -1,3 +1,4 @@
+#--- CMake Config Files -----------------------------------------------
 # - Use CMake's module to help generating relocatable config files
 include(CMakePackageConfigHelpers)
 
@@ -28,3 +29,17 @@ install(EXPORT HSFTEMPLATETargets
   DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/HSFTEMPLATE"
   )
 
+#--- Pkg-Config File --------------------------------------------------
+# - Derive relative pcfile -> prefix path to make pkg-config file
+#   relocatable
+file(RELATIVE_PATH HSFTEMPLATE_PCFILEDIR_TO_PREFIX
+  "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig"
+  "${CMAKE_INSTALL_PREFIX}"
+  )
+configure_file("${CMAKE_CURRENT_LIST_DIR}/HSFTEMPLATE.pc.in"
+  "${PROJECT_BINARY_DIR}/HSFTEMPLATE.pc"
+  @ONLY
+  )
+install(FILES "${PROJECT_BINARY_DIR}/HSFTEMPLATE.pc"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+  )
