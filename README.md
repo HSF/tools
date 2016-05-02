@@ -6,7 +6,7 @@ Software Foundation (HSF).
 ## hsf_create_project
 The tool hsf_create_project creates a template CMake project. The created project
 contains the standard use patterns for small CMake projects, plus support for
-Doxygen, CPack, and gtest. Further documentation is provided within the created
+Doxygen and CPack. Further documentation is provided within the created
 package itself inside the README.md.
 
 ## hsf_get_platform and hsf_platform_compatibility
