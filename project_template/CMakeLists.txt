@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.3)
 # - Call project() to setup system
 # From CMake 3, we can set the project version easily in one go
-project(HSFTEMPLATE VERSION 0.1.0)
+project(PROJECTTEMPLATE VERSION 0.1.0)
 
 #--- Define basic build settings -----------------------------------------------
 # - Use GNU-style hierarchy for installing build products
@@ -44,27 +44,27 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 #--- Declare options -----------------------------------------------------------
-option(HSFTEMPLATE_documentation "Whether or not to create doxygen doc target.")
+option(PROJECTTEMPLATE_documentation "Whether or not to create doxygen doc target.")
 
 #--- enable unit testing capabilities ------------------------------------------
 include(CTest)
 
 #--- enable CPack --------------------------------------------------------------
-include(cmake/HSFTEMPLATECPack.cmake)
+include(cmake/PROJECTTEMPLATECPack.cmake)
 
 #--- target for Doxygen documentation ------------------------------------------
-if(HSFTEMPLATE_documentation)
-  include(cmake/HSFTEMPLATEDoxygen.cmake)
+if(PROJECTTEMPLATE_documentation)
+  include(cmake/PROJECTTEMPLATEDoxygen.cmake)
 endif()
 
 #--- add version files ---------------------------------------------------------
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/HSFTEMPLATEVersion.h
-               ${CMAKE_CURRENT_BINARY_DIR}/HSFTEMPLATEVersion.h )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/HSFTEMPLATEVersion.h
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/HSFTEMPLATE )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PROJECTTEMPLATEVersion.h
+               ${CMAKE_CURRENT_BINARY_DIR}/PROJECTTEMPLATEVersion.h )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PROJECTTEMPLATEVersion.h
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/PROJECTTEMPLATE )
 
 #--- add CMake infrastructure --------------------------------------------------
-include(cmake/HSFTEMPLATECreateConfig.cmake)
+include(cmake/PROJECTTEMPLATECreateConfig.cmake)
 
 #--- add license files ---------------------------------------------------------
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE

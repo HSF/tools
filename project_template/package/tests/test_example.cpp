@@ -3,7 +3,7 @@
 #include "catch.hpp"
 
 // Header for interface we want to test
-#include "HSFTEMPLATE/Example.h"
+#include "PROJECTTEMPLATE/Example.h"
 
 // Define Catch test case
 // See
@@ -12,11 +12,11 @@
 //   https://github.com/philsquared/Catch/blob/master/docs/Readme.md
 // for additional docs on Catch
 TEST_CASE( "Example behaves correctly", "[interface]" ) {
-  auto e = HSFTEMPLATE::Example();
+  auto e = PROJECTTEMPLATE::Example();
   REQUIRE( e.get() == 0 );
 
   SECTION( "Copy assignment works" ) {
-    e = HSFTEMPLATE::Example(10);
+    e = PROJECTTEMPLATE::Example(10);
     REQUIRE( e.get() == 10 );
   }
 

@@ -1,4 +1,4 @@
-# HSFTEMPLATE
+# PROJECTTEMPLATE
 
 Please add some lines describing the project!
 
@@ -15,7 +15,7 @@ Please add some lines describing the project!
 The documentation of the project is based on doxygen.
 If you would like to build it, you have to configure the package with
 
-    cmake -DHSFTEMPLATE_documentation -DCMAKE_INSTALL_PREFIX=<installdir>  <path to sources>
+    cmake -DPROJECTTEMPLATE_documentation -DCMAKE_INSTALL_PREFIX=<installdir>  <path to sources>
 Invoking
 
     make doc
@@ -37,4 +37,4 @@ To run the tests of the project, first build it and then invoke
 
 ## Inclusion into other projects
 
-If you want to build your own project against HSFTEMPLATE, CMake may be the best option for you. Just add its location to _CMAKE_PREFIX_PATH_ and call _find_package(HSFTEMPLATE)_ within your CMakeLists.txt.
+If you want to build your own project against PROJECTTEMPLATE, CMake may be the best option for you. Just add its location to _CMAKE_PREFIX_PATH_ and call _find_package(PROJECTTEMPLATE)_ within your CMakeLists.txt.

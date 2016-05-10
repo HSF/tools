@@ -1,6 +1,6 @@
-#include "HSFTEMPLATE/Example.h"
+#include "PROJECTTEMPLATE/Example.h"
 
-namespace HSFTEMPLATE {
+namespace PROJECTTEMPLATE {
 
   Example::Example() :
     m_number(0)

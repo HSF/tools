@@ -1,4 +1,0 @@
-#ifndef HSFTEMPLATEVersion_h
-#define HSFTEMPLATEVersion_h
-#define HSFTEMPLATE_VERSION @HSFTEMPLATE_VERSION@
-#endif
