@@ -75,4 +75,4 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
 add_subdirectory(HSFSUBPACKAGE)
 
 #--- create uninstall target ---------------------------------------------------
-include(cmake/HSFTEMPLATEUninstall.cmake)
+include(cmake/PROJECTTEMPLATEUninstall.cmake)
