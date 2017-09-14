@@ -3,7 +3,7 @@
 #   correctly, but they will not show up in IDEs like Xcode if they are not
 #   listed in the files for a target
 set(examplelibrary_SOURCES
-  include/HSFTEMPLATE/Example.h
+  include/PROJECTTEMPLATE/Example.h
   src/Example.cpp
   )
 
@@ -26,12 +26,12 @@ target_include_directories(examplelibrary
 # The EXPORT name is used so that we can "export" the target for
 # use by client projects
 install(TARGETS examplelibrary
-  EXPORT HSFTEMPLATETargets
+  EXPORT PROJECTTEMPLATETargets
   DESTINATION ${CMAKE_INSTALL_LIBDIR}
   )
 
 ## install the headers
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HSFTEMPLATE
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/PROJECTTEMPLATE
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
 

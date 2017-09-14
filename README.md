@@ -3,8 +3,8 @@
 This is a collection of tools used within the context of the HEP
 Software Foundation (HSF).
 
-## hsf_create_project
-The tool hsf_create_project creates a template CMake project. The created project
+## create_project
+The tool create_project creates a template CMake project. The created project
 contains the standard use patterns for small CMake projects, plus support for
 Doxygen and CPack. Further documentation is provided within the created
 package itself inside the README.md.

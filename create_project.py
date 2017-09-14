@@ -93,20 +93,21 @@ class ProjectCreator(object):
             copyrightnotice += "// %s\n"%line
 
         replacements = {"COPYRIGHTNOTICE" : copyrightnotice,
-                        "HSFTEMPLATE"     : self.name,
+                        "PROJECTTEMPLATE"     : self.name,
                         "AUTHOR"          : self.author,
                         "HSFSUBPACKAGE"   : self.subpackage_name
         }
         for subdir, dirs, files in os.walk(self.target_dir):
             for file in files:
                 self.replace_in_file(join(subdir, file),replacements)
-        os.rename(join(self.target_dir,"cmake/HSFTEMPLATECPack.cmake"),join(self.target_dir,"cmake/%sCPack.cmake" %self.name))
-        os.rename(join(self.target_dir,"cmake/HSFTEMPLATEConfig.cmake.in"),join(self.target_dir,"cmake/%sConfig.cmake.in" %self.name))
-        os.rename(join(self.target_dir,"cmake/HSFTEMPLATECreateConfig.cmake"),join(self.target_dir,"cmake/%sCreateConfig.cmake" %self.name))
-        os.rename(join(self.target_dir,"cmake/HSFTEMPLATEUninstall.cmake"),join(self.target_dir,"cmake/%sUninstall.cmake" %self.name))
-        os.rename(join(self.target_dir,"cmake/HSFTEMPLATE_uninstall.cmake.in"),join(self.target_dir,"cmake/%s_uninstall.cmake.in" %self.name))
-        os.rename(join(self.target_dir,"cmake/HSFTEMPLATE.pc.in"),join(self.target_dir,"cmake/%s.pc.in" %self.name))
-        os.rename(join(self.target_dir,"HSFTEMPLATEVersion.h"),join(self.target_dir,"%sVersion.h" %self.name))
+        os.rename(join(self.target_dir,"cmake/PROJECTTEMPLATECPack.cmake"),join(self.target_dir,"cmake/%sCPack.cmake" %self.name))
+        os.rename(join(self.target_dir,"cmake/PROJECTTEMPLATEConfig.cmake.in"),join(self.target_dir,"cmake/%sConfig.cmake.in" %self.name))
+        os.rename(join(self.target_dir,"cmake/PROJECTTEMPLATECreateConfig.cmake"),join(self.target_dir,"cmake/%sCreateConfig.cmake" %self.name))
+        os.rename(join(self.target_dir,"cmake/PROJECTTEMPLATEDoxygen.cmake"),join(self.target_dir,"cmake/%sDoxygen.cmake" %self.name))
+        os.rename(join(self.target_dir,"cmake/PROJECTTEMPLATEUninstall.cmake"),join(self.target_dir,"cmake/%sUninstall.cmake" %self.name))
+        os.rename(join(self.target_dir,"cmake/PROJECTTEMPLATE_uninstall.cmake.in"),join(self.target_dir,"cmake/%s_uninstall.cmake.in" %self.name))
+        os.rename(join(self.target_dir,"cmake/PROJECTTEMPLATE.pc.in"),join(self.target_dir,"cmake/%s.pc.in" %self.name))
+        os.rename(join(self.target_dir,"PROJECTTEMPLATEVersion.h"),join(self.target_dir,"%sVersion.h" %self.name))
         os.rename(join(self.target_dir,"package/include/example"),join(self.target_dir,"package/include/%s" %self.name))
         os.rename(join(self.target_dir,"package"),join(self.target_dir,"%s" %self.subpackage_name))
     def print_summary(self):

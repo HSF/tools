@@ -15,7 +15,7 @@
  *
  */
 
-namespace HSFTEMPLATE {
+namespace PROJECTTEMPLATE {
 
   class Example {
   public:
