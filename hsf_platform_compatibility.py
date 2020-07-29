@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ###############################################################################
-# (c) Copyright 2015 CERN                                                     #
+# (c) Copyright 2015-2020 CERN                                                #
 #                                                                             #
 # This software is distributed under the terms of the GNU General Public      #
 # Licence version 3 (GPL Version 3), copied verbatim in the file "LICENCE".   #
@@ -11,15 +11,15 @@
 ###############################################################################
 
 __author__ = "Benedikt Hegner (CERN)"
-__copyright__ = "Copyright (C) 2015 CERN"
+__copyright__ = "Copyright (C) 2015-2020 CERN"
 __license__ = "GPLv3"
-__version__ = "0.1"
+__version__ = "0.2"
 
 import os
 import platform
 import re
 import sys
-from optparse import OptionParser
+from argparse import ArgumentParser
 
 os_compatibility = (("redhat6","slc6"),)
 
@@ -43,7 +43,7 @@ class HSFPlatformCompatibility(object):
     def check_architecture(self, arch1, arch2):
         if (arch1 == arch2):
           return True
-        self.failureReason = "Architectures %s and %s are incompatible" %(arch1, arch2)
+        self.failureReason = f"Architectures {arch1} and {arch2} are incompatible"
         return False
 
     def check_os(self, os1, os2):
@@ -55,7 +55,7 @@ class HSFPlatformCompatibility(object):
             if os2 in set:
               isCompatible = True
         if not isCompatible:
-           self.failureReason = "OS'es %s and %s are incompatible" %(os1, os2)
+           self.failureReason = f"OS'es {os1} and {os2} are incompatible"
         return isCompatible
 
     def check_compiler(self, comp1, comp2):
@@ -63,7 +63,7 @@ class HSFPlatformCompatibility(object):
         # exceptions to be coded up explicitly
         if (comp1[:-1] == comp2[:-1]):
           return True
-        self.failureReason = "Compilers %s and %s are incompatible" %(comp1, comp2)
+        self.failureReason = f"Compilers {comp1} and {comp2} are incompatible"
         return False
 
     def check_buildtype(self, type1, type2):
@@ -73,28 +73,26 @@ class HSFPlatformCompatibility(object):
     def get_components(self,platform):
         components = platform.split("-")
         if len(components) != 4:
-          print "Given platform '%s' doesn't follow standard arch-OS-compiler-buildtype schema." %platform
+          print(f"Given platform {platform} doesn't follow standard arch-OS-compiler-buildtype schema.")
           sys.exit(1)
         return components
 
 ##########################
 if __name__ == "__main__":
-    usage = "usage: %prog [options] platform1 platform2"
-    parser = OptionParser(usage=usage)
-    parser.add_option("-q", "--quiet",
-                      action="store_false", dest="verbose", default=True,
-                      help="don't print info messages")
+    parser = ArgumentParser()
+    parser.add_argument("-q", "--quiet",
+                        action="store_false", dest="verbose", default=True,
+                        help="don't print info messages")
+    parser.add_argument("platform1", help="First platform for comparison")
+    parser.add_argument("platform2", help="Second platform for comparison")
 
-    (options, args) = parser.parse_args()
-    if len(args) != 2:
-      parser.print_help()
-      sys.exit(1)
+    args = parser.parse_args()
     comp = HSFPlatformCompatibility()
-    isCompatible = comp.is_compatible(args[0],args[1])
+    isCompatible = comp.is_compatible(args.platform1, args.platform2)
 
     if isCompatible:
       sys.exit(0)
     else:
-      if options.verbose:
-        print comp.failureReason
+      if args.verbose:
+        print(comp.failureReason)
       sys.exit(1)

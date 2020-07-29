@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ###############################################################################
-# (c) Copyright 2015 CERN                                                     #
+# (c) Copyright 2015-2020 CERN                                                #
 #                                                                             #
 # This software is distributed under the terms of the GNU General Public      #
 # Licence version 3 (GPL Version 3), copied verbatim in the file "LICENCE".   #
@@ -11,9 +11,9 @@
 ###############################################################################
 
 __author__ = "Benedikt Hegner (CERN)"
-__copyright__ = "Copyright (C) 2015 CERN"
+__copyright__ = "Copyright (C) 2015-2020 CERN"
 __license__ = "GPLv3"
-__version__ = "0.1"
+__version__ = "0.2"
 
 import datetime, os, shutil, sys
 from os.path import join, split, dirname, abspath
@@ -36,11 +36,11 @@ class ProjectCreator(object):
         self.subpackage_name = subpackage_name
         self.license = license
         if self.license not in self.licenses:
-            self.report("ERROR: license %s unknown" %license)
+            self.report(f"ERROR: license {license} unknown")
             self.print_licenses()
             sys.exit(1)
         if os.path.exists(self.target_dir):
-            self.report("ERROR: %s already exists." %self.target_dir)
+            self.report(f"ERROR: {self.target_dir} already exists")
             sys.exit(1)
 
     def print_licenses(self):
@@ -70,7 +70,7 @@ class ProjectCreator(object):
     def report(self, message):
         """print messages to screen depending on verbosity level"""
         if self.verbose == True:
-            print message
+            print(message)
 
     @staticmethod
     def replace_in_file(filename, replacements):
@@ -78,7 +78,7 @@ class ProjectCreator(object):
         with open(filename,'r') as f:
             newlines = []
             for line in f.readlines():
-                for key, value in replacements.iteritems():
+                for key, value in replacements.items():
                     line = line.replace(key, value)
                 newlines.append(line.replace(key, value))
         with open(filename, 'w') as f:
@@ -137,21 +137,30 @@ class ProjectCreator(object):
 ##########################
 if __name__ == "__main__":
 
-    from optparse import OptionParser
+    from argparse import ArgumentParser
 
-    usage = "usage: %prog [options] <project name> <author> <target dir> <license>"
-    parser = OptionParser(usage)
-    parser.add_option("-q", "--quiet",
+    parser = ArgumentParser()
+    parser.add_argument("-q", "--quiet",
                       action="store_false", dest="verbose", default=True,
                       help="Don't write a report to screen")
-    parser.add_option("-p", "--package",
+    parser.add_argument("-p", "--package",
                       action="store", dest="subpackage_name", default="package",
                       help="Name of the created example-subpackage")
+    parser.add_argument("project_name", help="Name for new project")
+    parser.add_argument("author", help="Author of new project (format of 'Any Body <any.body@domain.edu>' recommended")
+    parser.add_argument("target_dir", help="Directory name for new project template")
 
-    (options, args) = parser.parse_args()
-    if len(args) != 4:
-        parser.error("Incorrect number of arguments.")
+    # Parse available licenses for the argument definition
+    license_dir  = join(dirname(abspath(__file__)),"project_licenses")
+    licenses = [f.rstrip(".txt") for f in
+                    os.listdir(license_dir)
+                    if f.endswith(".txt")]
+    parser.add_argument("license", help="License to apply to the new project ",
+        choices=licenses)
 
-    creator = ProjectCreator(*args,verbose=options.verbose,subpackage_name=options.subpackage_name)
+    args = parser.parse_args()
+    creator = ProjectCreator(args.project_name, args.author, args.target_dir,
+                             args.license, verbose=args.verbose, 
+                             subpackage_name=args.subpackage_name)
     creator.create()
     creator.print_summary()
