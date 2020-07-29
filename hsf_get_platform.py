@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 ###############################################################################
-# (c) Copyright 2015 CERN                                                     #
+# (c) Copyright 2015-2020 CERN                                                #
 #                                                                             #
 # This software is distributed under the terms of the GNU General Public      #
 # Licence version 3 (GPL Version 3), copied verbatim in the file "LICENCE".   #
@@ -11,16 +11,23 @@
 ###############################################################################
 
 __author__ = "Benedikt Hegner (CERN)"
-__copyright__ = "Copyright (C) 2015 CERN"
+__copyright__ = "Copyright (C) 2015-2020 CERN"
 __license__ = "GPLv3"
-__version__ = "0.1"
+__version__ = "0.2"
 
 import os
 import platform
 import re
 import sys
 
-from optparse import OptionParser
+try:
+    import distro
+except ImportError:
+    print("Failed to import required Python 'distro' module", file=sys.stderr)
+    sys.exit(1)
+
+from argparse import ArgumentParser
+from subprocess import run, PIPE, STDOUT
 
 class HSFPlatform(object):
     def __init__(self):
@@ -34,8 +41,8 @@ class HSFPlatform(object):
         """
         system = platform.system()
         if system == "Linux":
-            pf = platform.linux_distribution(full_distribution_name=0)[0]
-            version = platform.linux_distribution(full_distribution_name=0)[1].split(".")[0]
+            pf = distro.linux_distribution(full_distribution_name=0)[0]
+            version = distro.linux_distribution(full_distribution_name=0)[1].split(".")[0]
             # SLC6 misidentifies itself has RedHat
             if pf == "redhat":
                 if "CERN" in platform.linux_distribution()[0]:
@@ -46,7 +53,7 @@ class HSFPlatform(object):
         elif system == "Windows":
             pass
         else:
-            raise "System %s not supported" %system
+            raise f"System {system} not supported"
 
         return (pf+version).lower()
 
@@ -78,24 +85,29 @@ class HSFPlatform(object):
           else:
             ccommand = 'gcc'
         if ccommand == 'cl':
-            versioninfo = os.popen(ccommand).read()
+            versioninfo = run((ccommand), stdout=PIPE, stderr=STDOUT).stdout.decode("utf-8")
             patt = re.compile('.*Version ([0-9]+)[.].*')
             mobj = patt.match(versioninfo)
             compiler = 'vc' + str(int(mobj.group(1))-6)
         elif ccommand.endswith('clang'):
-            versioninfo = os.popen4(ccommand + ' -v')[1].read()
+            # clang prints version information to stderr
+            versioninfo = run((ccommand, '-v'), stdout=PIPE, stderr=STDOUT).stdout.decode("utf-8")
             patt = re.compile('.*version ([0-9]+)[.]([0-9]+)\\.([0-9]+)')
             mobj = patt.match(versioninfo)
             compiler = 'clang' + mobj.group(1) + mobj.group(2)
         elif ccommand == 'icc':
-            versioninfo = os.popen(ccommand + ' -dumpversion').read()
+            versioninfo = run((ccommand, '-dumpversion'), stdout=PIPE, stderr=STDOUT).stdout.decode("utf-8")
             patt = re.compile('([0-9]+)\\.([0-9]+)\\.([0-9]+)')
             mobj = patt.match(versioninfo)
             compiler = 'icc' + mobj.group(1)
         elif ccommand.endswith('cc'):
-            versioninfo = os.popen(ccommand + ' -dumpversion').read()
+            versioninfo = run((ccommand, '-dumpversion'), stdout=PIPE, stderr=STDOUT).stdout.decode("utf-8")
             patt = re.compile('([0-9]+)\\.([0-9]+)\\.([0-9]+)')
             mobj = patt.match(versioninfo)
+            # Some builds of gcc may only return the major version number
+            if mobj == None:
+                versioninfo = run((ccommand, '-dumpfullversion'), stdout=PIPE, stderr=STDOUT).stdout.decode("utf-8")
+                mobj = patt.match(versioninfo)
             compiler = 'gcc' + mobj.group(1) + mobj.group(2) + mobj.group(3)
         else:
             compiler = 'unknown'
@@ -131,31 +143,26 @@ class HSFPlatform(object):
 
 ##########################
 if __name__ == "__main__":
-    parser = OptionParser()
-    parser.add_option("-a", "--architecture", dest="architecture",
-                  help="set architecture", default=None)
-    parser.add_option("-b", "--buildtype", dest="buildtype",
-                  help="set buildtype", default = None)
-    parser.add_option("-c", "--compiler", dest="compiler",
-                  help="set compiler", default = None)
-    parser.add_option("-s", "--system", dest="os",
-                  help="set operating system", default = None)
-    parser.add_option("--get", dest="to_get",
-                  help="get either of 'os,architecture,compiler'. Otherwise dump the entire platform", default = None)
+    parser = ArgumentParser()
+    parser.add_argument("-a", "--architecture", dest="architecture",
+                        help="set architecture")
+    parser.add_argument("-b", "--buildtype", dest="buildtype",
+                        help="set buildtype")
+    parser.add_argument("-c", "--compiler", dest="compiler",
+                        help="set compiler")
+    parser.add_argument("-s", "--system", dest="os",
+                        help="set operating system")
+    parser.add_argument("--get", dest="to_get", choices=("os", "architecture", "compiler"),
+                        help='get one of %(choices)s. Otherwise print the entire platform')
 
 
-    (options, args) = parser.parse_args()
-    if len(args) != 0:
-        print "ERROR: This tool doesn't take any arguments"
-        sys.exit(1)
-    if options.to_get in ['os','architecture','compiler']:
-        print getattr(HSFPlatform, options.to_get)()
-    elif options.to_get != None:
-        print 'ERROR: Unkown option to get: %s' %options.to_get
-        sys.exit(1)
+    args = parser.parse_args()
+    if args.to_get:
+        print(getattr(HSFPlatform, args.to_get)())
     else:
-        print HSFPlatform.full_platform_string(architecture = options.architecture,
-                                        compiler     = options.compiler,
-                                        os           = options.os,
-                                        buildtype    = options.buildtype
+        print(HSFPlatform.full_platform_string(architecture = args.architecture,
+                                        compiler     = args.compiler,
+                                        os           = args.os,
+                                        buildtype    = args.buildtype
+            )
         )
