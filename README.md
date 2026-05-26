@@ -1,3 +1,9 @@
+# Archived
+
+This project is archived and should not be used anymore.
+
+Old README follows:
+
 # Common HSF Tools
 
 This is a collection of tools used within the context of the HEP
